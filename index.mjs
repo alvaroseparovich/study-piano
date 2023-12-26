@@ -1,3 +1,4 @@
+import { KeyboardSound } from './KeyboardSound.mjs'
 
 const KEY_NUMBER = "key-scale-order-"
 const KEY_DOWN = "key-down"
@@ -8,6 +9,7 @@ const minorScaleOrder = [1, 0.5, 1, 1, 1, 0.5, 1]
 const harmonicMinorScaleOrder = [1, 0.5, 1, 1, 0.5, 1.5, 0.5]
 const melodicMinorScaleOrder = [1, 0.5, 1, 1, 1, 1, 0.5]
 const defaultKey = "C"
+const keyboardSound = new KeyboardSound ()
 let currentKey = defaultKey
 let currentScale = 'majorScaleOrder'
 // cromatic should be created
@@ -42,7 +44,7 @@ async function pressAllScale(scaleNote, scaleOrder = majorScaleOrder) {
       let keyToPress = getKeyByNumber(currentNumberController)
       pressKey(keyToPress)
       currentNumberController += scaleOrder[currentNumberOnScale]
-      await wait(0.05)
+      await wait(0.1)
     }
 }
 
@@ -58,7 +60,7 @@ function getSomeElementClassPospend(NodeItem, prepend) {
 }
 
 function getKeyByNumber(number, keyboard = document) {
-  classNumber = floatToClass(number)
+  let classNumber = floatToClass(number)
   // console.log(number)
   
   let key = keyboard.querySelector('.' + KEY_NUMBER + classNumber)
@@ -70,6 +72,8 @@ function getKeyByNumber(number, keyboard = document) {
 function pressKey(number, keyboard = document) {
   let key =keyboard.querySelector('.' + KEY_NUMBER + number)
   key.classList.add(KEY_DOWN)
+  const keyNote = getSomeElementClassPospend(key, SCALE_OF)
+  keyboardSound.play(`${keyNote.replace('s','#')}${4}`)
 }
 
 function clearKeys(keyboard = document) {
@@ -94,7 +98,6 @@ function scaleOf(event){
   console.log(element)
   document.querySelector('.current-title span.note').textContent = element.textContent
   currentKey = getSomeElementClassPospend(element, SCALE_OF)
-  
 
   pressAllScale(currentKey, tableOfScales[currentScale])
 }
@@ -124,3 +127,12 @@ document.querySelectorAll('.scales-selection-butons button').forEach(button =>
   button.onclick = scaleSelection
 )
 
+document.querySelector('#start-sound')
+  .addEventListener('click', async () => {
+    try{
+      await Tone.start()
+      console.log('audio is ready')
+    } catch (err) {
+      console.error(err)
+    }
+})

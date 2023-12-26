@@ -8,7 +8,7 @@
 	
 </head>
 <body>
-	<button onclick="startOscilator()">Ativar som</button>
+	<button id="start-sound">Ativar som</button>
 	<h4 class="current-title"><span class="scale">Escala Maior</span> de <span class="note">?</span></h4>
 	<div class="octave-midle scales-butons">
 		<div class="keyboard">
@@ -34,6 +34,6 @@
 		<button class="scale-melodicMinorScaleOrder">Escala Melódica Menor</button>
 	</div>
 </body>
-<script src="index.mjs"></script>
-<script src="oscillator.mjs"></script>
+<script src="http://unpkg.com/tone"></script>
+<script src="index.mjs" type="module"></script>
 </html>
