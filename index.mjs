@@ -30,8 +30,6 @@ async function pressAllScale(scaleNote, scaleOrder = majorScaleOrder) {
   const tonicNumber = getElementClassKeyNumber(tonic)
   const tonicNumberFloat = classToFloat(tonicNumber)
 
-  // console.log('Scale - ', scaleNote, tonic, tonicNumber)
-
   let currentNumberController = tonicNumberFloat
   for(
     let currentNumberOnScale = 0;
