@@ -1,5 +1,5 @@
 export class KeyboardSound {
-  keyDefaultHold = 1  
+  keyDefaultHold = 0.2
   constructor(){
     this.synth = new Tone.PolySynth(Tone.Synth).toDestination();
     // const now = Tone.now()
