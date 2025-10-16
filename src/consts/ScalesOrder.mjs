@@ -1,5 +1,5 @@
 export const majorScaleOrder = [1, 1, 0.5, 1, 1, 1, 0.5]
-export const minorScaleOrder = [1, 0.5, 1, 1, 1, 0.5, 1]
+export const minorScaleOrder = [1, 0.5, 1, 1, 0.5, 1, 1]
 export const harmonicMinorScaleOrder = [1, 0.5, 1, 1, 0.5, 1.5, 0.5]
 export const melodicMinorScaleOrder = [1, 0.5, 1, 1, 1, 1, 0.5]
 
