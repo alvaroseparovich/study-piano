@@ -76,6 +76,47 @@ const KEY_NOTE = {
   ';': 95, // B6
 };
 
+const KEYNAME_NOTE = {
+  'KeyQ': 60, // C4
+  'Digit2': 61, // C#4
+  'KeyW': 62, // D4
+  'Digit3': 63, // D#4
+  'KeyE': 64, // E4
+  'KeyR': 65, // F4
+  'Digit5': 66, // F#4
+  'KeyT': 67, // G4
+  'Digit6': 68, // G#4
+  'KeyY': 69, // A4
+  'Digit7': 70, // A#4
+  'KeyU': 71, // B4
+  'KeyI': 72, // C5
+  'Digit9': 73, // C#5
+  'KeyO': 74, // D5
+  'Digit0': 75, // D#5
+  'KeyP': 76,  // E5
+  // --------------
+  // Second Hand
+  'IntlBackslash': 77, // F5
+  'KeyA': 78, // F#5
+  'KeyZ': 79, // G5
+  'KeyS': 80, // G#5
+  'KeyX': 81, // A5
+  'KeyD': 82, // A#5
+  'KeyC': 83, // B5
+  'KeyV': 84, // C6
+  'KeyG': 85, // C#6
+  'KeyB': 86, // D6
+  'KeyH': 87, // D#6
+  'KeyN': 88, // E6
+  'KeyM': 89, // F6
+  'KeyK': 90, // F#6
+  'Comma': 91, // G6
+  'KeyL': 92, // G#6
+  'Period': 93, // A6
+  'Semicolon': 94, // A#6
+  'Slash': 95, // B6
+};
+
 let midiAccess = null;
 let midiOutputs = new Map();
 let selectedOutputId = null;
@@ -184,40 +225,40 @@ const pressed = new Set();
 // Modify keydown and keyup to add/remove visual feedback
 window.addEventListener('keydown', (ev)=>{
   console.log(ev.key, ev);
-const k = ev.key.toUpperCase();
-if (!KEY_NOTE.hasOwnProperty(k)) return;
-if (pressed.has(k)) return; // held
-pressed.add(k);
-const note = KEY_NOTE[k];
-  // ensure audio context resumed
-if (audioCtx.state === 'suspended') audioCtx.resume();
-if (midiAccess && selectedOutputId){
-noteOnMIDI(note, 0x7f);
-}else if (useSynthCheckbox.checked){
-startSynth(note);
-}
-document.querySelector(`.qwert-${ev.key.toLowerCase()}`)?.classList.add('key-down');
-ev.preventDefault();
+  const k = ev.code;
+  if (!KEYNAME_NOTE.hasOwnProperty(k)) return;
+  if (pressed.has(k)) return; // held
+  pressed.add(k);
+  const note = KEYNAME_NOTE[k];
+    // ensure audio context resumed
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  if (midiAccess && selectedOutputId){
+  noteOnMIDI(note, 0x7f);
+  }else if (useSynthCheckbox.checked){
+  startSynth(note);
+  }
+  document.querySelector(`.${k}`)?.classList.add('key-down');
+  ev.preventDefault();
 });
 
 window.addEventListener('keyup', (ev)=>{
-const k = ev.key.toUpperCase();
-if (!KEY_NOTE.hasOwnProperty(k)) return;
-pressed.delete(k);
-const note = KEY_NOTE[k];
-if (midiAccess && selectedOutputId){
-noteOffMIDI(note);
-}else if (useSynthCheckbox.checked){
-stopSynth(note);
-}
-document.querySelector(`.qwert-${ev.key.toLowerCase()}`)?.classList.remove('key-down');
-ev.preventDefault();
+  const k = ev.code;
+  if (!KEYNAME_NOTE.hasOwnProperty(k)) return;
+  pressed.delete(k);
+  const note = KEYNAME_NOTE[k];
+  if (midiAccess && selectedOutputId){
+  noteOffMIDI(note);
+  }else if (useSynthCheckbox.checked){
+  stopSynth(note);
+  }
+  document.querySelector(`.${k}`)?.classList.remove('key-down');
+  ev.preventDefault();
 });
 
 // also handle visibility change: stop all on blur
 window.addEventListener('blur', ()=>{
   for (const k of Array.from(pressed)){
-    const note = KEY_NOTE[k];
+    const note = KEYNAME_NOTE[k];
     if (midiAccess && selectedOutputId) noteOffMIDI(note);
     else if (useSynthCheckbox.checked) stopSynth(note);
   }
@@ -234,47 +275,47 @@ window.addEventListener('blur', ()=>{
 <div class="octave-midle scales-butons" style="display:flex"> 
 
   <div class="keyboard k-4"> 
-    <div class="key white C key-note-C qwert-q"><span>C</span></div> 
-    <div class="key black Cs Df key-note-Cs qwert-2"><span>C#</span></div>
-    <div class="key white D key-note-D qwert-w"><span>D</span></div>
-    <div class="key black Ds Ef key-note-Ds qwert-3"><span>D#</span></div>
-    <div class="key white E  key-note-E qwert-e"><span>E</span></div>
-    <div class="key white F key-note-F qwert-r"><span>F</span></div>
-    <div class="key black Fs Gf key-note-Fs qwert-5"><span>F#</span></div>
-    <div class="key white G key-note-G qwert-t"><span>G</span></div>
-    <div class="key black Gs Af key-note-Gs qwert-6"><span>G#</span></div>
-    <div class="key white A key-note-A qwert-y"><span>A</span></div>
-    <div class="key black As Bf key-note-As qwert-7"><span>A#</span></div>
-    <div class="key white B key-note-B qwert-u"><span>B</span></div> 
+    <div class="key white C key-note-C KeyQ"><span>C</span></div> 
+    <div class="key black Cs Df key-note-Cs Digit2"><span>C#</span></div>
+    <div class="key white D key-note-D KeyW"><span>D</span></div>
+    <div class="key black Ds Ef key-note-Ds Digit3"><span>D#</span></div>
+    <div class="key white E  key-note-E KeyE"><span>E</span></div>
+    <div class="key white F key-note-F KeyR"><span>F</span></div>
+    <div class="key black Fs Gf key-note-Fs Digit5"><span>F#</span></div>
+    <div class="key white G key-note-G KeyT"><span>G</span></div>
+    <div class="key black Gs Af key-note-Gs Digit6"><span>G#</span></div>
+    <div class="key white A key-note-A KeyY"><span>A</span></div>
+    <div class="key black As Bf key-note-As Digit7"><span>A#</span></div>
+    <div class="key white B key-note-B KeyU"><span>B</span></div> 
   
   </div> 
   <div class="keyboard k-5"> 
-    <div class="key white C key-note-C qwert-i"><span>C</span></div> 
-    <div class="key black Cs Df key-note-Cs qwert-9"><span>C#</span></div>
-    <div class="key white D key-note-D qwert-o"><span>D</span></div>
-    <div class="key black Ds Ef key-note-Ds qwert-0"><span>D#</span></div>
-    <div class="key white E  key-note-E qwert-p"><span>E</span></div>
-    <div class="key white F key-note-F qwert-\"><span>F</span></div>
-    <div class="key black Fs Gf key-note-Fs qwert-a"><span>F#</span></div>
-    <div class="key white G key-note-G qwert-z"><span>G</span></div>
-    <div class="key black Gs Af key-note-Gs qwert-s"><span>G#</span></div>
-    <div class="key white A key-note-A qwert-x"><span>A</span></div>
-    <div class="key black As Bf key-note-As qwert-d"><span>A#</span></div>
-    <div class="key white B key-note-B qwert-c"><span>B</span></div> 
+    <div class="key white C key-note-C KeyI"><span>C</span></div> 
+    <div class="key black Cs Df key-note-Cs Digit9"><span>C#</span></div>
+    <div class="key white D key-note-D KeyO"><span>D</span></div>
+    <div class="key black Ds Ef key-note-Ds Digit0"><span>D#</span></div>
+    <div class="key white E  key-note-E KeyP"><span>E</span></div>
+    <div class="key white F key-note-F IntlBackslash"><span>F</span></div>
+    <div class="key black Fs Gf key-note-Fs KeyA"><span>F#</span></div>
+    <div class="key white G key-note-G KeyZ"><span>G</span></div>
+    <div class="key black Gs Af key-note-Gs KeyS"><span>G#</span></div>
+    <div class="key white A key-note-A KeyX"><span>A</span></div>
+    <div class="key black As Bf key-note-As KeyD"><span>A#</span></div>
+    <div class="key white B key-note-B KeyC"><span>B</span></div> 
   </div>
   <div class="keyboard k-6"> 
-    <div class="key white C key-note-C qwert-v"><span>C</span></div> 
-    <div class="key black Cs Df key-note-Cs qwert-g"><span>C#</span></div>
-    <div class="key white D key-note-D qwert-b"><span>D</span></div>
-    <div class="key black Ds Ef key-note-Ds qwert-h"><span>D#</span></div>
-    <div class="key white E  key-note-E qwert-n"><span>E</span></div>
-    <div class="key white F key-note-F qwert-m"><span>F</span></div>
-    <div class="key black Fs Gf key-note-Fs qwert-k"><span>F#</span></div>
-    <div class="key white G key-note-G qwert-,"><span>G</span></div>
-    <div class="key black Gs Af key-note-Gs qwert-l"><span>G#</span></div>
-    <div class="key white A key-note-A qwert-."><span>A</span></div>
-    <div class="key black As Bf key-note-As qwert-ç"><span>A#</span></div>
-    <div class="key white B key-note-B qwert-;"><span>B</span></div> 
+    <div class="key white C key-note-C KeyV"><span>C</span></div> 
+    <div class="key black Cs Df key-note-Cs KeyG"><span>C#</span></div>
+    <div class="key white D key-note-D KeyB"><span>D</span></div>
+    <div class="key black Ds Ef key-note-Ds KeyH"><span>D#</span></div>
+    <div class="key white E  key-note-E KeyN"><span>E</span></div>
+    <div class="key white F key-note-F KeyM"><span>F</span></div>
+    <div class="key black Fs Gf key-note-Fs KeyK"><span>F#</span></div>
+    <div class="key white G key-note-G Comma"><span>G</span></div>
+    <div class="key black Gs Af key-note-Gs KeyL"><span>G#</span></div>
+    <div class="key white A key-note-A Period"><span>A</span></div>
+    <div class="key black As Bf key-note-As Semicolon"><span>A#</span></div>
+    <div class="key white B key-note-B Slash"><span>B</span></div> 
   </div>
   <style>
     .keyboard{
