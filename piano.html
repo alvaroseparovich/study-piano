@@ -16,7 +16,7 @@
 </head>
 <body>
   <div class="card">
-    <h6>MIDI keyboard (Q..P + numbers) — WebMIDI + fallback synth</h6>
+    <h6 style="margin: 0;">MIDI keyboard (Q..P + numbers) — WebMIDI + fallback synth</h6>
     <div class="row">
       <button id="enableMidi">Enable MIDI</button>
       <label for="outputs">MIDI Output:</label>
@@ -31,22 +31,6 @@
     </div>
 
     <div class="help">Keys mapping: Q W E R T Y U I O P  → C4..E5. Numbers 2 3 5 6 7 9 0 → black keys. Hold a key to sustain; release to stop.</div>
-    <hr />
-    <!-- <div>
-      <strong>Key map (visual):</strong>
-      <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
-        <span class="kbd">Q</span>=C4 <span class="kbd">2</span>=C#4 •
-        <span class="kbd">W</span>=D4 <span class="kbd">3</span>=D#4 •
-        <span class="kbd">E</span>=E4 •
-        <span class="kbd">R</span>=F4 <span class="kbd">5</span>=F#4 •
-        <span class="kbd">T</span>=G4 <span class="kbd">6</span>=G#4 •
-        <span class="kbd">Y</span>=A4 <span class="kbd">7</span>=A#4 •
-        <span class="kbd">U</span>=B4 •
-        <span class="kbd">I</span>=C5 <span class="kbd">9</span>=C#5 •
-        <span class="kbd">O</span>=D5 <span class="kbd">0</span>=D#5 •
-        <span class="kbd">P</span>=E5
-      </div>
-    </div> -->
   </div>
 
 <script>
@@ -68,7 +52,28 @@ const KEY_NOTE = {
   '9': 73, // C#5
   'O': 74, // D5
   '0': 75, // D#5
-  'P': 76  // E5
+  'P': 76,  // E5
+  // --------------
+  // Second Hand
+  '\\': 77, // F5
+  'A': 78, // F#5
+  'Z': 79, // G5
+  'S': 80, // G#5
+  'X': 81, // A5
+  'D': 82, // A#5
+  'C': 83, // B5
+  'V': 84, // C6
+  'G': 85, // C#6
+  'B': 86, // D6
+  'H': 87, // D#6
+  'N': 88, // E6
+  'M': 89, // F6
+  'K': 90, // F#6
+  ',': 91, // G6
+  'L': 92, // G#6
+  '.': 93, // A6
+  'Ç': 94, // A#6
+  ';': 95, // B6
 };
 
 let midiAccess = null;
@@ -178,6 +183,7 @@ enableBtn.addEventListener('click', async ()=>{
 const pressed = new Set();
 // Modify keydown and keyup to add/remove visual feedback
 window.addEventListener('keydown', (ev)=>{
+  console.log(ev.key, ev);
 const k = ev.key.toUpperCase();
 if (!KEY_NOTE.hasOwnProperty(k)) return;
 if (pressed.has(k)) return; // held
@@ -248,13 +254,27 @@ window.addEventListener('blur', ()=>{
     <div class="key white D key-note-D qwert-o"><span>D</span></div>
     <div class="key black Ds Ef key-note-Ds qwert-0"><span>D#</span></div>
     <div class="key white E  key-note-E qwert-p"><span>E</span></div>
-    <div class="key white F key-note-F"><span>F</span></div>
-    <div class="key black Fs Gf key-note-Fs"><span>F#</span></div>
-    <div class="key white G key-note-G"><span>G</span></div>
-    <div class="key black Gs Af key-note-Gs"><span>G#</span></div>
-    <div class="key white A key-note-A"><span>A</span></div>
-    <div class="key black As Bf key-note-As"><span>A#</span></div>
-    <div class="key white B key-note-B"><span>B</span></div> 
+    <div class="key white F key-note-F qwert-\"><span>F</span></div>
+    <div class="key black Fs Gf key-note-Fs qwert-a"><span>F#</span></div>
+    <div class="key white G key-note-G qwert-z"><span>G</span></div>
+    <div class="key black Gs Af key-note-Gs qwert-s"><span>G#</span></div>
+    <div class="key white A key-note-A qwert-x"><span>A</span></div>
+    <div class="key black As Bf key-note-As qwert-d"><span>A#</span></div>
+    <div class="key white B key-note-B qwert-c"><span>B</span></div> 
+  </div>
+  <div class="keyboard k-6"> 
+    <div class="key white C key-note-C qwert-v"><span>C</span></div> 
+    <div class="key black Cs Df key-note-Cs qwert-g"><span>C#</span></div>
+    <div class="key white D key-note-D qwert-b"><span>D</span></div>
+    <div class="key black Ds Ef key-note-Ds qwert-h"><span>D#</span></div>
+    <div class="key white E  key-note-E qwert-n"><span>E</span></div>
+    <div class="key white F key-note-F qwert-m"><span>F</span></div>
+    <div class="key black Fs Gf key-note-Fs qwert-k"><span>F#</span></div>
+    <div class="key white G key-note-G qwert-,"><span>G</span></div>
+    <div class="key black Gs Af key-note-Gs qwert-l"><span>G#</span></div>
+    <div class="key white A key-note-A qwert-."><span>A</span></div>
+    <div class="key black As Bf key-note-As qwert-ç"><span>A#</span></div>
+    <div class="key white B key-note-B qwert-;"><span>B</span></div> 
   </div>
   <style>
     .keyboard{
