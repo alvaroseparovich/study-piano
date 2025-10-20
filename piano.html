@@ -34,48 +34,6 @@
   </div>
 
 <script>
-// Key -> MIDI note number mapping
-const KEY_NOTE = {
-  'Q': 60, // C4
-  '2': 61, // C#4
-  'W': 62, // D4
-  '3': 63, // D#4
-  'E': 64, // E4
-  'R': 65, // F4
-  '5': 66, // F#4
-  'T': 67, // G4
-  '6': 68, // G#4
-  'Y': 69, // A4
-  '7': 70, // A#4
-  'U': 71, // B4
-  'I': 72, // C5
-  '9': 73, // C#5
-  'O': 74, // D5
-  '0': 75, // D#5
-  'P': 76,  // E5
-  // --------------
-  // Second Hand
-  '\\': 77, // F5
-  'A': 78, // F#5
-  'Z': 79, // G5
-  'S': 80, // G#5
-  'X': 81, // A5
-  'D': 82, // A#5
-  'C': 83, // B5
-  'V': 84, // C6
-  'G': 85, // C#6
-  'B': 86, // D6
-  'H': 87, // D#6
-  'N': 88, // E6
-  'M': 89, // F6
-  'K': 90, // F#6
-  ',': 91, // G6
-  'L': 92, // G#6
-  '.': 93, // A6
-  'Ç': 94, // A#6
-  ';': 95, // B6
-};
-
 const KEYNAME_NOTE = {
   'KeyQ': 60, // C4
   'Digit2': 61, // C#4
@@ -134,8 +92,8 @@ synthGain.gain.value = parseFloat(volumeControl.value);
 synthGain.connect(audioCtx.destination);
 volumeControl.addEventListener('input', ()=> synthGain.gain.value = parseFloat(volumeControl.value));
 
-function midiNoteToFreq(note){
-  return 440 * Math.pow(2, (note - 69)/12);
+function midiNoteToFreq(note, octaveShift = 1) {
+  return 440 * Math.pow(2, ((note - 12 * octaveShift) - 69) / 12);
 }
 
 function startSynth(note){
@@ -275,47 +233,47 @@ window.addEventListener('blur', ()=>{
 <div class="octave-midle scales-butons" style="display:flex"> 
 
   <div class="keyboard k-4"> 
-    <div class="key white C key-note-C KeyQ"><span>C</span></div> 
-    <div class="key black Cs Df key-note-Cs Digit2"><span>C#</span></div>
-    <div class="key white D key-note-D KeyW"><span>D</span></div>
-    <div class="key black Ds Ef key-note-Ds Digit3"><span>D#</span></div>
-    <div class="key white E  key-note-E KeyE"><span>E</span></div>
-    <div class="key white F key-note-F KeyR"><span>F</span></div>
-    <div class="key black Fs Gf key-note-Fs Digit5"><span>F#</span></div>
-    <div class="key white G key-note-G KeyT"><span>G</span></div>
-    <div class="key black Gs Af key-note-Gs Digit6"><span>G#</span></div>
-    <div class="key white A key-note-A KeyY"><span>A</span></div>
-    <div class="key black As Bf key-note-As Digit7"><span>A#</span></div>
-    <div class="key white B key-note-B KeyU"><span>B</span></div> 
+    <div class="key white C KeyQ"><span>C</span></div> 
+    <div class="key black Cs Df Digit2"><span>C#</span></div>
+    <div class="key white D KeyW"><span>D</span></div>
+    <div class="key black Ds Ef Digit3"><span>D#</span></div>
+    <div class="key white E  KeyE"><span>E</span></div>
+    <div class="key white F KeyR"><span>F</span></div>
+    <div class="key black Fs Gf Digit5"><span>F#</span></div>
+    <div class="key white G KeyT"><span>G</span></div>
+    <div class="key black Gs Af Digit6"><span>G#</span></div>
+    <div class="key white A KeyY"><span>A</span></div>
+    <div class="key black As Bf Digit7"><span>A#</span></div>
+    <div class="key white B KeyU"><span>B</span></div> 
   
   </div> 
   <div class="keyboard k-5"> 
-    <div class="key white C key-note-C KeyI"><span>C</span></div> 
-    <div class="key black Cs Df key-note-Cs Digit9"><span>C#</span></div>
-    <div class="key white D key-note-D KeyO"><span>D</span></div>
-    <div class="key black Ds Ef key-note-Ds Digit0"><span>D#</span></div>
-    <div class="key white E  key-note-E KeyP"><span>E</span></div>
-    <div class="key white F key-note-F IntlBackslash"><span>F</span></div>
-    <div class="key black Fs Gf key-note-Fs KeyA"><span>F#</span></div>
-    <div class="key white G key-note-G KeyZ"><span>G</span></div>
-    <div class="key black Gs Af key-note-Gs KeyS"><span>G#</span></div>
-    <div class="key white A key-note-A KeyX"><span>A</span></div>
-    <div class="key black As Bf key-note-As KeyD"><span>A#</span></div>
-    <div class="key white B key-note-B KeyC"><span>B</span></div> 
+    <div class="key white C KeyI"><span>C</span></div> 
+    <div class="key black Cs Df Digit9"><span>C#</span></div>
+    <div class="key white D KeyO"><span>D</span></div>
+    <div class="key black Ds Ef Digit0"><span>D#</span></div>
+    <div class="key white E  KeyP"><span>E</span></div>
+    <div class="key white F IntlBackslash"><span>F</span></div>
+    <div class="key black Fs Gf KeyA"><span>F#</span></div>
+    <div class="key white G KeyZ"><span>G</span></div>
+    <div class="key black Gs Af KeyS"><span>G#</span></div>
+    <div class="key white A KeyX"><span>A</span></div>
+    <div class="key black As Bf KeyD"><span>A#</span></div>
+    <div class="key white B KeyC"><span>B</span></div> 
   </div>
   <div class="keyboard k-6"> 
-    <div class="key white C key-note-C KeyV"><span>C</span></div> 
-    <div class="key black Cs Df key-note-Cs KeyG"><span>C#</span></div>
-    <div class="key white D key-note-D KeyB"><span>D</span></div>
-    <div class="key black Ds Ef key-note-Ds KeyH"><span>D#</span></div>
-    <div class="key white E  key-note-E KeyN"><span>E</span></div>
-    <div class="key white F key-note-F KeyM"><span>F</span></div>
-    <div class="key black Fs Gf key-note-Fs KeyK"><span>F#</span></div>
-    <div class="key white G key-note-G Comma"><span>G</span></div>
-    <div class="key black Gs Af key-note-Gs KeyL"><span>G#</span></div>
-    <div class="key white A key-note-A Period"><span>A</span></div>
-    <div class="key black As Bf key-note-As Semicolon"><span>A#</span></div>
-    <div class="key white B key-note-B Slash"><span>B</span></div> 
+    <div class="key white C KeyV"><span>C</span></div> 
+    <div class="key black Cs Df KeyG"><span>C#</span></div>
+    <div class="key white D KeyB"><span>D</span></div>
+    <div class="key black Ds Ef KeyH"><span>D#</span></div>
+    <div class="key white E  KeyN"><span>E</span></div>
+    <div class="key white F KeyM"><span>F</span></div>
+    <div class="key black Fs Gf KeyK"><span>F#</span></div>
+    <div class="key white G Comma"><span>G</span></div>
+    <div class="key black Gs Af KeyL"><span>G#</span></div>
+    <div class="key white A Period"><span>A</span></div>
+    <div class="key black As Bf Semicolon"><span>A#</span></div>
+    <div class="key white B Slash"><span>B</span></div> 
   </div>
   <style>
     .keyboard{
