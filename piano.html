@@ -12,10 +12,11 @@
     .kbd{display:inline-block;padding:6px 10px;border-radius:6px;background:#0b1220;border:1px solid #223;min-width:26px;text-align:center}
     .help{opacity:.8;font-size:13px;margin-top:8px}
   </style>
+  <link rel="stylesheet" href="style.css"></style>
 </head>
 <body>
   <div class="card">
-    <h2>MIDI keyboard (Q..P + numbers) — WebMIDI + fallback synth</h2>
+    <h6>MIDI keyboard (Q..P + numbers) — WebMIDI + fallback synth</h6>
     <div class="row">
       <button id="enableMidi">Enable MIDI</button>
       <label for="outputs">MIDI Output:</label>
@@ -31,7 +32,7 @@
 
     <div class="help">Keys mapping: Q W E R T Y U I O P  → C4..E5. Numbers 2 3 5 6 7 9 0 → black keys. Hold a key to sustain; release to stop.</div>
     <hr />
-    <div>
+    <!-- <div>
       <strong>Key map (visual):</strong>
       <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
         <span class="kbd">Q</span>=C4 <span class="kbd">2</span>=C#4 •
@@ -45,7 +46,7 @@
         <span class="kbd">O</span>=D5 <span class="kbd">0</span>=D#5 •
         <span class="kbd">P</span>=E5
       </div>
-    </div>
+    </div> -->
   </div>
 
 <script>
@@ -175,33 +176,36 @@ enableBtn.addEventListener('click', async ()=>{
 
 // keyboard handling: track pressed keys to avoid repeats
 const pressed = new Set();
+// Modify keydown and keyup to add/remove visual feedback
 window.addEventListener('keydown', (ev)=>{
-  const k = ev.key.toUpperCase();
-  if (!KEY_NOTE.hasOwnProperty(k)) return;
-  if (pressed.has(k)) return; // held
-  pressed.add(k);
-  const note = KEY_NOTE[k];
+const k = ev.key.toUpperCase();
+if (!KEY_NOTE.hasOwnProperty(k)) return;
+if (pressed.has(k)) return; // held
+pressed.add(k);
+const note = KEY_NOTE[k];
   // ensure audio context resumed
-  if (audioCtx.state === 'suspended') audioCtx.resume();
-  if (midiAccess && selectedOutputId){
-    noteOnMIDI(note, 0x7f);
-  }else if (useSynthCheckbox.checked){
-    startSynth(note);
-  }
-  ev.preventDefault();
+if (audioCtx.state === 'suspended') audioCtx.resume();
+if (midiAccess && selectedOutputId){
+noteOnMIDI(note, 0x7f);
+}else if (useSynthCheckbox.checked){
+startSynth(note);
+}
+document.querySelector(`.qwert-${ev.key.toLowerCase()}`)?.classList.add('key-down');
+ev.preventDefault();
 });
 
 window.addEventListener('keyup', (ev)=>{
-  const k = ev.key.toUpperCase();
-  if (!KEY_NOTE.hasOwnProperty(k)) return;
-  pressed.delete(k);
-  const note = KEY_NOTE[k];
-  if (midiAccess && selectedOutputId){
-    noteOffMIDI(note);
-  }else if (useSynthCheckbox.checked){
-    stopSynth(note);
-  }
-  ev.preventDefault();
+const k = ev.key.toUpperCase();
+if (!KEY_NOTE.hasOwnProperty(k)) return;
+pressed.delete(k);
+const note = KEY_NOTE[k];
+if (midiAccess && selectedOutputId){
+noteOffMIDI(note);
+}else if (useSynthCheckbox.checked){
+stopSynth(note);
+}
+document.querySelector(`.qwert-${ev.key.toLowerCase()}`)?.classList.remove('key-down');
+ev.preventDefault();
 });
 
 // also handle visibility change: stop all on blur
@@ -217,5 +221,47 @@ window.addEventListener('blur', ()=>{
 // Helpful: allow clicking on onscreen keys to test
 // (simple implementation)
 </script>
+
+
+
+
+<div class="octave-midle scales-butons" style="display:flex"> 
+
+  <div class="keyboard k-4"> 
+    <div class="key white C key-note-C qwert-q"><span>C</span></div> 
+    <div class="key black Cs Df key-note-Cs qwert-2"><span>C#</span></div>
+    <div class="key white D key-note-D qwert-w"><span>D</span></div>
+    <div class="key black Ds Ef key-note-Ds qwert-3"><span>D#</span></div>
+    <div class="key white E  key-note-E qwert-e"><span>E</span></div>
+    <div class="key white F key-note-F qwert-r"><span>F</span></div>
+    <div class="key black Fs Gf key-note-Fs qwert-5"><span>F#</span></div>
+    <div class="key white G key-note-G qwert-t"><span>G</span></div>
+    <div class="key black Gs Af key-note-Gs qwert-6"><span>G#</span></div>
+    <div class="key white A key-note-A qwert-y"><span>A</span></div>
+    <div class="key black As Bf key-note-As qwert-7"><span>A#</span></div>
+    <div class="key white B key-note-B qwert-u"><span>B</span></div> 
+  
+  </div> 
+  <div class="keyboard k-5"> 
+    <div class="key white C key-note-C qwert-i"><span>C</span></div> 
+    <div class="key black Cs Df key-note-Cs qwert-9"><span>C#</span></div>
+    <div class="key white D key-note-D qwert-o"><span>D</span></div>
+    <div class="key black Ds Ef key-note-Ds qwert-0"><span>D#</span></div>
+    <div class="key white E  key-note-E qwert-p"><span>E</span></div>
+    <div class="key white F key-note-F"><span>F</span></div>
+    <div class="key black Fs Gf key-note-Fs"><span>F#</span></div>
+    <div class="key white G key-note-G"><span>G</span></div>
+    <div class="key black Gs Af key-note-Gs"><span>G#</span></div>
+    <div class="key white A key-note-A"><span>A</span></div>
+    <div class="key black As Bf key-note-As"><span>A#</span></div>
+    <div class="key white B key-note-B"><span>B</span></div> 
+  </div>
+  <style>
+    .keyboard{
+      margin: 0;
+    }
+  </style>
+</div>
+
 </body>
 </html>
