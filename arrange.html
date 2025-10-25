@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Piano</title>
+	<link rel="stylesheet" href="style.css"></style>
+	
+</head>
+<body>
+	<button id="start-sound">Ativar som</button>
+  <h4>Arranjo</h4>
+
+
+	<h4 class="current-title"><span class="scale">Escala Maior</span> de <span class="note">?</span></h4>
+	<div class="octave-midle scales-butons">
+		<div class="keyboard">
+			<div class="key white C key-number-1 key-scale-order-0 key-note-C"><span>C</span></div>
+			<div class="key black Cs Df key-number-1-5 key-scale-order-0-5 key-note-Cs"><span>C#</span></div>
+			<div class="key white D key-number-2 key-scale-order-1 key-note-D"><span>D</span></div>
+			<div class="key black Ds Ef key-number-2-5 key-scale-order-1-5 key-note-Ds"><span>D#</span></div>
+			<div class="key white E key-number-3 key-scale-order-2 key-note-E"><span>E</span></div>
+			<div class="key white F key-number-4 key-scale-order-2-5 key-note-F"><span>F</span></div>
+			<div class="key black Fs Gf key-number-4-5 key-scale-order-3 key-note-Fs"><span>F#</span></div>
+			<div class="key white G key-number-5 key-scale-order-3-5 key-note-G"><span>G</span></div>
+			<div class="key black Gs Af key-number-5-5 key-scale-order-4 key-note-Gs"><span>G#</span></div>
+			<div class="key white A key-number-6 key-scale-order-4-5 key-note-A"><span>A</span></div>
+			<div class="key black As Bf key-number-6-5 key-scale-order-5 key-note-As"><span>A#</span></div>
+			<div class="key white B key-number-7 key-scale-order-5-5 key-note-B"><span>B</span></div>
+		</div>
+	
+	</div>
+	<div class="scales-selection-butons">
+		<button class="scale-majorScaleOrder">Escala Maior</button>
+		<button class="scale-minorScaleOrder">Escala Menor</button>
+		<button class="scale-harmonicMinorScaleOrder">Escala Harmônica Menor</button>
+		<button class="scale-melodicMinorScaleOrder">Escala Melódica Menor</button>
+	</div>
+</body>
+<script src="https://unpkg.com/tone"></script>
+<script src="index.mjs" type="module"></script>
+</html>
