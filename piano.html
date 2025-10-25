@@ -37,7 +37,7 @@
     </div>
     <div class="row">
       <label for="pitch">Pitch</label>
-      <input id="pitch" type="range" min="-12" max="12" step="1" value="0" style="width:200px" />
+      <select id="pitch" style="width:200px"></select>
       <span id="pitchReadout" class="help" style="margin-left:8px">(0 - C)</span>
     </div>
 
@@ -111,11 +111,24 @@ function nameForSemitone(n){
   const idx = ((n % 12) + 12) % 12;
   return NOTE_NAMES[idx];
 }
+function populatePitchOptions(){
+  if (pitchControl && pitchControl.tagName === 'SELECT' && pitchControl.options.length === 0){
+    for (let v = -12; v <= 12; v++){
+      const opt = document.createElement('option');
+      opt.value = String(v);
+      opt.textContent = `${v} - ${nameForSemitone(v)}`;
+      if (v === 0) opt.selected = true;
+      pitchControl.appendChild(opt);
+    }
+  }
+}
+populatePitchOptions();
 function updatePitch(){
   PITCH_MODIFIER = parseInt(pitchControl.value, 10) || 0;
   pitchReadout.textContent = `(${PITCH_MODIFIER} - ${nameForSemitone(PITCH_MODIFIER)})`;
 }
 pitchControl?.addEventListener('input', updatePitch);
+pitchControl?.addEventListener('change', updatePitch);
 updatePitch();
 
 function pitchModifier(note){
@@ -265,47 +278,47 @@ window.addEventListener('blur', ()=>{
 <div class="octave-midle keyboard-scales" style="display:flex"> 
 
   <div class="keyboard k-4"> 
-    <div class="key white C KeyQ midi-60" data-midi="60"><span class="grau"> </span><span>C</span></div> 
-    <div class="key black Cs Df Digit2 midi-61" data-midi="61"><span class="grau"> </span><span>C#</span></div>
-    <div class="key white D KeyW midi-62" data-midi="62"><span class="grau"> </span><span>D</span></div>
-    <div class="key black Ds Ef Digit3 midi-63" data-midi="63"><span class="grau"> </span><span>D#</span></div>
-    <div class="key white E  KeyE midi-64" data-midi="64"><span class="grau"> </span><span>E</span></div>
-    <div class="key white F KeyR midi-65" data-midi="65"><span class="grau"> </span><span>F</span></div>
-    <div class="key black Fs Gf Digit5 midi-66" data-midi="66"><span class="grau"> </span><span>F#</span></div>
-    <div class="key white G KeyT midi-67" data-midi="67"><span class="grau"> </span><span>G</span></div>
-    <div class="key black Gs Af Digit6 midi-68" data-midi="68"><span class="grau"> </span><span>G#</span></div>
-    <div class="key white A KeyY midi-69" data-midi="69"><span class="grau"> </span><span>A</span></div>
-    <div class="key black As Bf Digit7 midi-70" data-midi="70"><span class="grau"> </span><span>A#</span></div>
-    <div class="key white B KeyU midi-71" data-midi="71"><span class="grau"> </span><span>B</span></div> 
+    <div class="key white C KeyQ midi-60" data-midi="60"><span class="grau"> </span><span>1</span></div> 
+    <div class="key black Cs Df Digit2 midi-61" data-midi="61"><span class="grau"> </span><span>1+</span></div>
+    <div class="key white D KeyW midi-62" data-midi="62"><span class="grau"> </span><span>2</span></div>
+    <div class="key black Ds Ef Digit3 midi-63" data-midi="63"><span class="grau"> </span><span>2+</span></div>
+    <div class="key white E  KeyE midi-64" data-midi="64"><span class="grau"> </span><span>3</span></div>
+    <div class="key white F KeyR midi-65" data-midi="65"><span class="grau"> </span><span>4</span></div>
+    <div class="key black Fs Gf Digit5 midi-66" data-midi="66"><span class="grau"> </span><span>4+</span></div>
+    <div class="key white G KeyT midi-67" data-midi="67"><span class="grau"> </span><span>5</span></div>
+    <div class="key black Gs Af Digit6 midi-68" data-midi="68"><span class="grau"> </span><span>5+</span></div>
+    <div class="key white A KeyY midi-69" data-midi="69"><span class="grau"> </span><span>6</span></div>
+    <div class="key black As Bf Digit7 midi-70" data-midi="70"><span class="grau"> </span><span>6+</span></div>
+    <div class="key white B KeyU midi-71" data-midi="71"><span class="grau"> </span><span>7</span></div> 
   
   </div> 
   <div class="keyboard k-5"> 
-    <div class="key white C KeyI midi-72" data-midi="72"><span class="grau"> </span><span>C</span></div> 
-    <div class="key black Cs Df Digit9 midi-73" data-midi="73"><span class="grau"> </span><span>C#</span></div>
-    <div class="key white D KeyO midi-74" data-midi="74"><span class="grau"> </span><span>D</span></div>
-    <div class="key black Ds Ef Digit0 midi-75" data-midi="75"><span class="grau"> </span><span>D#</span></div>
-    <div class="key white E  KeyP midi-76" data-midi="76"><span class="grau"> </span><span>E</span></div>
-    <div class="key white F IntlBackslash midi-77" data-midi="77"><span class="grau"> </span><span>F</span></div>
-    <div class="key black Fs Gf KeyA midi-78" data-midi="78"><span class="grau"> </span><span>F#</span></div>
-    <div class="key white G KeyZ midi-79" data-midi="79"><span class="grau"> </span><span>G</span></div>
-    <div class="key black Gs Af KeyS midi-80" data-midi="80"><span class="grau"> </span><span>G#</span></div>
-    <div class="key white A KeyX midi-81" data-midi="81"><span class="grau"> </span><span>A</span></div>
-    <div class="key black As Bf KeyD midi-82" data-midi="82"><span class="grau"> </span><span>A#</span></div>
-    <div class="key white B KeyC midi-83" data-midi="83"><span class="grau"> </span><span>B</span></div> 
+    <div class="key white C KeyI midi-72" data-midi="72"><span class="grau"> </span><span>1</span></div> 
+    <div class="key black Cs Df Digit9 midi-73" data-midi="73"><span class="grau"> </span><span>1+</span></div>
+    <div class="key white D KeyO midi-74" data-midi="74"><span class="grau"> </span><span>2</span></div>
+    <div class="key black Ds Ef Digit0 midi-75" data-midi="75"><span class="grau"> </span><span>2+</span></div>
+    <div class="key white E  KeyP midi-76" data-midi="76"><span class="grau"> </span><span>3</span></div>
+    <div class="key white F IntlBackslash midi-77" data-midi="77"><span class="grau"> </span><span>4</span></div>
+    <div class="key black Fs Gf KeyA midi-78" data-midi="78"><span class="grau"> </span><span>4+</span></div>
+    <div class="key white G KeyZ midi-79" data-midi="79"><span class="grau"> </span><span>5</span></div>
+    <div class="key black Gs Af KeyS midi-80" data-midi="80"><span class="grau"> </span><span>5+</span></div>
+    <div class="key white A KeyX midi-81" data-midi="81"><span class="grau"> </span><span>6</span></div>
+    <div class="key black As Bf KeyD midi-82" data-midi="82"><span class="grau"> </span><span>6+</span></div>
+    <div class="key white B KeyC midi-83" data-midi="83"><span class="grau"> </span><span>7</span></div> 
   </div>
   <div class="keyboard k-6"> 
-    <div class="key white C KeyV midi-84" data-midi="84"><span class="grau"> </span><span>C</span></div> 
-    <div class="key black Cs Df KeyG midi-85" data-midi="85"><span class="grau"> </span><span>C#</span></div>
-    <div class="key white D KeyB midi-86" data-midi="86"><span class="grau"> </span><span>D</span></div>
-    <div class="key black Ds Ef KeyH midi-87" data-midi="87"><span class="grau"> </span><span>D#</span></div>
-    <div class="key white E  KeyN midi-88" data-midi="88"><span class="grau"> </span><span>E</span></div>
-    <div class="key white F KeyM midi-89" data-midi="89"><span class="grau"> </span><span>F</span></div>
-    <div class="key black Fs Gf KeyK midi-90" data-midi="90"><span class="grau"> </span><span>F#</span></div>
-    <div class="key white G Comma midi-91" data-midi="91"><span class="grau"> </span><span>G</span></div>
-    <div class="key black Gs Af KeyL midi-92" data-midi="92"><span class="grau"> </span><span>G#</span></div>
-    <div class="key white A Period midi-93" data-midi="93"><span class="grau"> </span><span>A</span></div>
-    <div class="key black As Bf Semicolon midi-94" data-midi="94"><span class="grau"> </span><span>A#</span></div>
-    <div class="key white B Slash midi-95" data-midi="95"><span class="grau"> </span><span>B</span></div> 
+    <div class="key white C KeyV midi-84" data-midi="84"><span class="grau"> </span><span>1</span></div> 
+    <div class="key black Cs Df KeyG midi-85" data-midi="85"><span class="grau"> </span><span>1+</span></div>
+    <div class="key white D KeyB midi-86" data-midi="86"><span class="grau"> </span><span>2</span></div>
+    <div class="key black Ds Ef KeyH midi-87" data-midi="87"><span class="grau"> </span><span>2+</span></div>
+    <div class="key white E  KeyN midi-88" data-midi="88"><span class="grau"> </span><span>3</span></div>
+    <div class="key white F KeyM midi-89" data-midi="89"><span class="grau"> </span><span>4</span></div>
+    <div class="key black Fs Gf KeyK midi-90" data-midi="90"><span class="grau"> </span><span>4+</span></div>
+    <div class="key white G Comma midi-91" data-midi="91"><span class="grau"> </span><span>5</span></div>
+    <div class="key black Gs Af KeyL midi-92" data-midi="92"><span class="grau"> </span><span>5+</span></div>
+    <div class="key white A Period midi-93" data-midi="93"><span class="grau"> </span><span>6</span></div>
+    <div class="key black As Bf Semicolon midi-94" data-midi="94"><span class="grau"> </span><span>6+</span></div>
+    <div class="key white B Slash midi-95" data-midi="95"><span class="grau"> </span><span>7</span></div> 
   </div>
   <style>
     .keyboard{
