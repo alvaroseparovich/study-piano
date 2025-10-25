@@ -35,6 +35,11 @@
       <label style="margin-left:12px">Volume</label>
       <input id="volume" type="range" min="0" max="1" step="0.01" value="0.6" />
     </div>
+    <div class="row">
+      <label for="pitch">Pitch</label>
+      <input id="pitch" type="range" min="-12" max="12" step="1" value="0" style="width:200px" />
+      <span id="pitchReadout" class="help" style="margin-left:8px">(0 - C)</span>
+    </div>
 
     <div class="help">Keys mapping: Q W E R T Y U I O P  Numbers 2 3 5 6 7 9 0... Hold a key to sustain; release to stop.</div>
 <script>
@@ -88,6 +93,8 @@ const enableBtn = document.getElementById('enableMidi');
 const channelInput = document.getElementById('channel');
 const useSynthCheckbox = document.getElementById('useSynth');
 const volumeControl = document.getElementById('volume');
+const pitchControl = document.getElementById('pitch');
+const pitchReadout = document.getElementById('pitchReadout');
 
 // WebAudio fallback synth
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -96,6 +103,24 @@ const synthGain = audioCtx.createGain();
 synthGain.gain.value = parseFloat(volumeControl.value);
 synthGain.connect(audioCtx.destination);
 volumeControl.addEventListener('input', ()=> synthGain.gain.value = parseFloat(volumeControl.value));
+
+let PITCH_MODIFIER = 0;
+
+const NOTE_NAMES = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+function nameForSemitone(n){
+  const idx = ((n % 12) + 12) % 12;
+  return NOTE_NAMES[idx];
+}
+function updatePitch(){
+  PITCH_MODIFIER = parseInt(pitchControl.value, 10) || 0;
+  pitchReadout.textContent = `(${PITCH_MODIFIER} - ${nameForSemitone(PITCH_MODIFIER)})`;
+}
+pitchControl?.addEventListener('input', updatePitch);
+updatePitch();
+
+function pitchModifier(note){
+  return note + PITCH_MODIFIER;
+}
 
 function midiNoteToFreq(note, octaveShift = 1) {
   return 440 * Math.pow(2, ((note - 12 * octaveShift) - 69) / 12);
@@ -130,6 +155,7 @@ function stopSynth(note){
 }
 
 function noteOnMIDI(note, velocity=0x7f){
+  console.log(note, velocity);
   if (!midiAccess || !selectedOutputId) return;
   const out = midiOutputs.get(selectedOutputId);
   if (!out) return;
@@ -187,12 +213,13 @@ enableBtn.addEventListener('click', async ()=>{
 const pressed = new Set();
 // Modify keydown and keyup to add/remove visual feedback
 window.addEventListener('keydown', (ev)=>{
-  console.log(ev.key, ev);
+  //console.log(ev.key, ev);
   const k = ev.code;
   if (!KEYNAME_NOTE.hasOwnProperty(k)) return;
   if (pressed.has(k)) return; // held
+  console.log(k);
   pressed.add(k);
-  const note = KEYNAME_NOTE[k];
+  const note = pitchModifier(KEYNAME_NOTE[k]);
     // ensure audio context resumed
   if (audioCtx.state === 'suspended') audioCtx.resume();
   if (midiAccess && selectedOutputId){
@@ -208,7 +235,7 @@ window.addEventListener('keyup', (ev)=>{
   const k = ev.code;
   if (!KEYNAME_NOTE.hasOwnProperty(k)) return;
   pressed.delete(k);
-  const note = KEYNAME_NOTE[k];
+  const note = pitchModifier(KEYNAME_NOTE[k]);
   if (midiAccess && selectedOutputId){
   noteOffMIDI(note);
   }else if (useSynthCheckbox.checked){
@@ -221,7 +248,7 @@ window.addEventListener('keyup', (ev)=>{
 // also handle visibility change: stop all on blur
 window.addEventListener('blur', ()=>{
   for (const k of Array.from(pressed)){
-    const note = KEYNAME_NOTE[k];
+    const note = pitchModifier(KEYNAME_NOTE[k]);
     if (midiAccess && selectedOutputId) noteOffMIDI(note);
     else if (useSynthCheckbox.checked) stopSynth(note);
   }
